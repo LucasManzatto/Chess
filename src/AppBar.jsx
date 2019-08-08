@@ -10,7 +10,10 @@ import * as board from './board.js';
 import { connect } from 'react-redux';
 import * as Chess from 'chess.js'
 
-import { setFen ,setBoardState} from './Redux/actions';
+
+import {rootReducer} from './Redux/rootReducer';
+const {actions} = rootReducer;
+const {setFen ,setBoardState} = actions;
 
 const styles = {
 	root: {

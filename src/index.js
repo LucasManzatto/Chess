@@ -8,11 +8,10 @@ import 'typeface-roboto';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import grey from '@material-ui/core/colors/grey';
 
-import { configureStore } from 'redux-starter-kit'
-import rootReducer from './Redux/rootReducer'
 import { Provider } from 'react-redux';
 
-import {initialSettings} from './Redux/initialSettings';
+import {store} from './Redux/rootReducer';
+
 const theme = createMuiTheme({
 	palette: {
 		background: {
@@ -33,9 +32,6 @@ const theme = createMuiTheme({
 		useNextVariants: true
 	}
 });
-
-const store = configureStore({ reducer: {board : rootReducer} ,preLoadedState : initialSettings})
-
 ReactDOM.render(
 	<Provider store={store}>
 		<MuiThemeProvider theme={theme}>

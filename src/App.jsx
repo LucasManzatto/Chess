@@ -1,8 +1,7 @@
 import React from 'reactn';
 import { connect } from 'react-redux';
-import { setOpenings, addOpening, setSubOpenings } from './Redux/actions';
 import './App.css';
-import Xadrez from './Chess';
+import Chess from './Chess';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { withTheme } from '@material-ui/core/styles';
 import grey from '@material-ui/core/colors/grey';
@@ -18,9 +17,8 @@ class App extends React.Component {
 		this.state = {};
 	}
 	async componentDidMount() {
-		const openings = await FirebaseService.getOpenings();
-		await wait(500)
-		this.props.setOpenings(openings);
+		// const openings = await FirebaseService.getOpenings();
+		// this.props.setOpenings(openings);
 	}
 	render() {
 		return (
@@ -29,7 +27,9 @@ class App extends React.Component {
 				<div className="row">
 					<NavBar />
 				</div>
-				<Xadrez />
+				<div className="row">
+					<Chess />
+				</div>
 			</div>
 		);
 	}
@@ -37,4 +37,4 @@ class App extends React.Component {
 const mapStateToProps = (state) => {
 	return state;
 };
-export default connect(mapStateToProps, { setOpenings, setSubOpenings, addOpening })(withTheme()(App));
+export default connect(mapStateToProps, {})(withTheme()(App));

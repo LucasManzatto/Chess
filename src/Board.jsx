@@ -14,31 +14,32 @@ let cor = darkSquare;
 const Board = (props) => {
 	const { fen } = props;
 	let fullFen = _.split(fen, ' ');
-	let board = _.split(fullFen[0], '/');
-	let counter = 0;
+	let fenBoard = _.split(fullFen[0], '/');
+	let position = 0;
 	let rowNumber = 8;
 
 	const renderCell = (piece) => {
 		cor = cor === lightSquare ? darkSquare : lightSquare;
 		return (
 			<Cell
-				key={boardSettings.positions[counter]}
+				key={boardSettings.positions[position]}
 				piece={piece}
 				cor={cor}
 				corInversa={cor === lightSquare ? darkSquare : lightSquare}
 				cell={piece}
-				square={boardSettings.positions[counter++]}
+				square={boardSettings.positions[position++]}
 			/>
 		);
 	};
-	return board.map((row) => {
+	return fenBoard.map(boardRow => {
 		cor = cor === lightSquare ? darkSquare : lightSquare;
-		let squares = _.split(row, '');
+		let squares = _.split(boardRow, '');
 		return (
 			<div key={rowNumber--} className="row justify-content-center" style={{ height: '12.5%' }}>
 				{squares.map((square) => {
+					const isEmptySquares = _.isNumber(parseInt(square)) && !_.isNaN(parseInt(square));
 					//checa se é um numero e adiciona os campos vazios
-					return _.isNumber(parseInt(square)) && !_.isNaN(parseInt(square))
+					return isEmptySquares
 						? //Cria o numero de quadrados vazios a partir do FEN
 							_.map(_.repeat(' ', parseInt(square)), () => renderCell(''))
 						: //senao adiciona a peça no quadrado

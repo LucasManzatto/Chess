@@ -12,10 +12,9 @@ import Fen from './Fen';
 
 const styles = {};
 
-const Xadrez = (props) => {
+const Chess = (props) => {
 	return (
 		<Fragment>
-			<div className="row">
 				<div className="col-3 mt-3 mb-4">
 					<Openings />
 				</div>
@@ -40,7 +39,6 @@ const Xadrez = (props) => {
 						<Jogadas />
 					</div>
 				</div>
-			</div>
 		</Fragment>
 	);
 };
@@ -49,4 +47,4 @@ const mapStateToProps = (state) => {
 	return { board: state.board };
 };
 
-export default connect(mapStateToProps, {})(withStyles(styles)(Xadrez));
+export default connect(mapStateToProps, {})(withStyles(styles)(Chess));

@@ -2,15 +2,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Piece from './Piece';
-import { setPossibleSquares, setClickedPiece, setBoardState } from './Redux/actions';
 import * as boardSettings from './board.js';
 import * as Chess from 'chess.js';
 import _ from 'lodash';
 import { Typography } from '@material-ui/core';
-import { getBestMove } from './AI/AI.js';
+
+import {rootReducer }from './Redux/rootReducer';
+const {actions} = rootReducer;
+const { setPossibleSquares, setClickedPiece, setBoardState }  = actions;
 
 const Cell = (props) => {
-	const { board, piece, square } = props;
+	const { board, piece, square ,cor} = props;
 
 	const isSameSquare = (from, to) => from === to;
 	const canMove = (chess, from, to) => chess.move({ from, to, promotion: 'q' }) != null;
@@ -198,7 +200,7 @@ const Cell = (props) => {
 								width: '100%',
 								zIndex: 1,
 								opacity: 1,
-								backgroundColor: props.cor
+								backgroundColor: cor
 							}}
 						/>
 					</div>
@@ -208,7 +210,7 @@ const Cell = (props) => {
 	};
 
 	return (
-		<div className="col p-0" onClick={movePiece} key={props.cell} style={{ zIndex: 0, backgroundColor: props.cor }}>
+		<div className="col p-0" onClick={movePiece} key={props.cell} style={{ zIndex: 0, backgroundColor: cor }}>
 			{renderInCheck()}
 			{RenderLast()}
 			{renderOverlay(board, 'green')}

@@ -1,10 +1,12 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import { connect } from 'react-redux';
-import { setClickedPiece, setPossibleSquares } from './Redux/actions';
 import * as Chess from 'chess.js';
-import Draggable from 'react-draggable';
 import _ from 'lodash';
+
+import {rootReducer }from './Redux/rootReducer';
+const {actions} = rootReducer;
+const { setClickedPiece, setPossibleSquares }  = actions;
 
 const Piece = (props) => {
 	const getPossibleSquares = (moves) => {

@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useGlobal, useState, Fragment } from 'reactn';
 import { connect } from 'react-redux';
-import { setFen, setJogadas, setPgn, setBoardState } from './Redux/actions';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -13,6 +12,10 @@ import AddOpening from './AddOpening';
 import * as Chess from 'chess.js';
 import _ from 'lodash';
 import { Typography, Button } from '@material-ui/core';
+
+import {rootReducer }from './Redux/rootReducer';
+const {actions,reducer} = rootReducer;
+const { setFen, setJogadas, setPgn, setBoardState }  = actions;
 
 const ItemOpening = (props) => {
 	const [ open, setOpen ] = useState(false);
@@ -35,7 +38,6 @@ const ItemOpening = (props) => {
 			});
 			return jogada;
 		});
-		console.log(jogadas);
 		setBoardState({
 			fen: chess.fen(),
 			turn: chess.turn(),
