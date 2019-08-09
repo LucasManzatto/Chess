@@ -28,15 +28,19 @@ const BoardCell = (props:Props) => {
 
 	const isSameSquare = (from:string, to:string) => from === to;
 
+	const isWhiteTurn = (turn: string) => turn === boardSettings.whiteTurn;
+
+	const isBlackTurn = (turn: string) => turn === boardSettings.blackTurn;
+
 	const canMove = (chess : any, from:string, to:string) => chess.move({ from, to, promotion: 'q' }) != null;
 
 	const canRenderShortCastle = (possibleSquares: any[], currentTurn: string, square: string) =>
 		_.includes(possibleSquares, boardSettings.shortCastle)
-		&& (currentTurn === boardSettings.whiteTurn ? /([fg]1)/.test(square) : /([fg]8)/.test(square));
+		&& (isWhiteTurn(currentTurn) ? /([fg]1)/.test(square) : /([fg]8)/.test(square));
 
 	const canRenderLongCastle = (possibleSquares: string[], CurrentTurn: string, square: string) =>
 		_.includes(possibleSquares, boardSettings.longCastle)
-		&& (CurrentTurn === boardSettings.whiteTurn ? /([bcd]1)/.test(square) : /([bcd]8)/.test(square));
+		&& (isWhiteTurn(CurrentTurn) ? /([bcd]1)/.test(square) : /([bcd]8)/.test(square));
 
 	const resetSquare = () => {
 		props.setClickedPiece('');
