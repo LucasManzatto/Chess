@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useGlobal, useState, Fragment } from 'reactn';
+import React, { useState, Fragment } from 'reactn';
 import { connect } from 'react-redux';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -13,11 +13,11 @@ import * as Chess from 'chess.js';
 import _ from 'lodash';
 import { Typography, Button } from '@material-ui/core';
 
-import {rootReducer }from './Redux/rootReducer';
-const {actions,reducer} = rootReducer;
+import {rootReducer }from '../../../Redux/rootReducer';
+const {actions} = rootReducer;
 const { setFen, setJogadas, setPgn, setBoardState }  = actions;
 
-const ItemOpening = (props) => {
+const OpeningItem = (props:any) => {
 	const [ open, setOpen ] = useState(false);
 	const { opening, setPgn, setBoardState } = props;
 
@@ -121,11 +121,11 @@ const ItemOpening = (props) => {
 	);
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state:any) => {
 	return {
 		jogadas: state.board.jogadas,
 		openings: state.board.openings
 	};
 };
 
-export default connect(mapStateToProps, { setFen, setJogadas, setPgn, setBoardState })(ItemOpening);
+export default connect(mapStateToProps, { setFen, setJogadas, setPgn, setBoardState })(OpeningItem);

@@ -1,18 +1,18 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
-import Board from './Board.jsx';
+import Board from './Board/Board';
 
-import Jogadas from './Jogadas';
+import Jogadas from './Moves/Moves';
 
-import Openings from './Openings';
 import { withStyles } from '@material-ui/core/styles';
 
 import Pgn from './Pgn';
 import Fen from './Fen';
+import Openings from './Openings/Openings';
 
 const styles = {};
 
-const Chess = (props) => {
+const Chess = (props: any) => {
 	return (
 		<Fragment>
 				<div className="col-3 mt-3 mb-4">
@@ -43,7 +43,7 @@ const Chess = (props) => {
 	);
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: any) => {
 	return { board: state.board };
 };
 

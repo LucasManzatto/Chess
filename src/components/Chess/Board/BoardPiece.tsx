@@ -4,12 +4,21 @@ import { connect } from 'react-redux';
 import * as Chess from 'chess.js';
 import _ from 'lodash';
 
-import {rootReducer }from './Redux/rootReducer';
+import { rootReducer } from '../../../Redux/rootReducer';
+import { Piece } from '../../../Models/Piece';
 const {actions} = rootReducer;
 const { setClickedPiece, setPossibleSquares }  = actions;
 
-const Piece = (props) => {
-	const getPossibleSquares = (moves) => {
+interface Props{
+	fen: string;
+	square: string;
+	setClickedPiece : Function;
+	setPossibleSquares : Function;
+	piece : Piece;
+}
+
+const BoardPiece = (props:Props) => {
+	const getPossibleSquares = (moves: string[]) => {
 		return moves.map((move) => _.replace(move, /(.[x]|([N].(?![1-9]))|([QKRNB+#]))/g, ''));
 	};
 
@@ -20,8 +29,8 @@ const Piece = (props) => {
 	};
 	return <img onClick={handleClick} alt="Piece" height={'100%'} width={'100%'} src={props.piece.img} />;
 };
-const mapStateToProps = (state) => {
+const mapStateToProps = (state:any) => {
 	return { fen: state.board.fen };
 };
 
-export default connect(mapStateToProps, { setClickedPiece, setPossibleSquares })(Piece);
+export default connect(mapStateToProps, { setClickedPiece, setPossibleSquares })(BoardPiece);

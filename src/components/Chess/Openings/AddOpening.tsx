@@ -1,6 +1,7 @@
+//REACT IMPORTS
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
-import * as actions from './Redux/actions';
+
+//MATERIAL IMPORTS
 import { TextField, Typography } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -8,11 +9,19 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-import FirebaseService from './Firebase/firebaseService';
+import FirebaseService from '../../../Firebase/firebaseService';
 
+//PROJECT IMPORTS
 import * as Chess from 'chess.js';
 
-const AddOpening = (props) => {
+//REDUX IMPORTS
+import { connect } from 'react-redux';
+import {rootReducer }from '../../../Redux/rootReducer';
+const {actions} = rootReducer;
+const { addOpening }  = actions;
+
+
+const AddOpening = (props:any) => {
 	const chess = new Chess();
 	const { texto } = props;
 	const [ nome, setNome ] = useState('');
@@ -89,11 +98,11 @@ const AddOpening = (props) => {
 	);
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state:any) => {
 	return { openings: state.board.openings };
 };
-const mapDispatchToProps = (dispatch) => {
-	return { addOpening: (newOpening) => dispatch(actions.addOpening(newOpening)) };
+const mapDispatchToProps = (dispatch: any) => {
+	return { addOpening: (newOpening: any) => dispatch(addOpening(newOpening)) };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddOpening);

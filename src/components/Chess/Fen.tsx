@@ -1,10 +1,10 @@
 import React from 'react';
 import { Typography } from '@material-ui/core';
 
-const Fen = (props) => {
+const Fen = ({fen}) => {
 	return (
 		<Typography align="left" color="secondary">
-			FEN: {props.fen}
+			FEN: {fen}
 		</Typography>
 	);
 };

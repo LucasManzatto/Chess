@@ -1,20 +1,23 @@
 import React from 'reactn';
 import { connect } from 'react-redux';
 import './App.css';
-import Chess from './Chess';
+import Chess from '../Chess/Chess';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { withTheme } from '@material-ui/core/styles';
 import grey from '@material-ui/core/colors/grey';
-import FirebaseService from './Firebase/firebaseService';
+import FirebaseService from '../../Firebase/firebaseService';
 
 import NavBar from './AppBar';
 
-let wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+let wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-class App extends React.Component {
-	constructor(props) {
+interface Props {
+	setOpenings : Function;
+}
+
+class App extends React.Component<Props> {
+	constructor(props: Readonly<Props>) {
 		super(props);
-		this.state = {};
 	}
 	async componentDidMount() {
 		// const openings = await FirebaseService.getOpenings();
@@ -34,7 +37,7 @@ class App extends React.Component {
 		);
 	}
 }
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: any) => {
 	return state;
 };
 export default connect(mapStateToProps, {})(withTheme()(App));

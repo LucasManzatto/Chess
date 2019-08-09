@@ -1,7 +1,9 @@
+import { Board } from "../Models/Board";
+
 export const startPosition = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
 
-export const initialSettings = {
+export const initialSettings : Board = {
     openings: [],
     subOpenings: [],
     clickedPiece: '',
@@ -20,7 +22,7 @@ export const initialSettings = {
         height: 0,
         width: 0
     },
-    capturadas: {
+    capturedPieces:{
         white: [],
         black: []
     },

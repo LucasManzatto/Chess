@@ -1,37 +1,53 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import { connect } from 'react-redux';
-import Piece from './Piece';
-import * as boardSettings from './board.js';
+import BoardPiece from './BoardPiece';
+import * as boardSettings from '../../../board';
 import * as Chess from 'chess.js';
 import _ from 'lodash';
 import { Typography } from '@material-ui/core';
 
-import {rootReducer }from './Redux/rootReducer';
+import {rootReducer }from '../../../Redux/rootReducer';
+import { Board } from '../../../Models/Board';
 const {actions} = rootReducer;
 const { setPossibleSquares, setClickedPiece, setBoardState }  = actions;
 
-const Cell = (props) => {
+interface Props{
+	board : Board;
+	piece: string;
+	square: string;
+	cor: string;
+	corInversa: string;
+	setClickedPiece : Function;
+	setPossibleSquares: Function;
+	setBoardState: Function;
+}
+
+const BoardCell = (props:Props) => {
 	const { board, piece, square ,cor} = props;
 
-	const isSameSquare = (from, to) => from === to;
-	const canMove = (chess, from, to) => chess.move({ from, to, promotion: 'q' }) != null;
+	const isSameSquare = (from:string, to:string) => from === to;
 
-	const canRenderShortCastle = (possibleSquares, turn, square) =>
-		_.includes(possibleSquares, 'O-O') && (turn === 'w' ? /([fg]1)/.test(square) : /([fg]8)/.test(square));
+	const canMove = (chess : any, from:string, to:string) => chess.move({ from, to, promotion: 'q' }) != null;
 
-	const canRenderLongCastle = (possibleSquares, turn, square) =>
-		_.includes(possibleSquares, 'O-O-O') && (turn === 'w' ? /([bcd]1)/.test(square) : /([bcd]8)/.test(square));
+	const canRenderShortCastle = (possibleSquares: any[], currentTurn: string, square: string) =>
+		_.includes(possibleSquares, boardSettings.shortCastle)
+		&& (currentTurn === boardSettings.whiteTurn ? /([fg]1)/.test(square) : /([fg]8)/.test(square));
+
+	const canRenderLongCastle = (possibleSquares: string[], CurrentTurn: string, square: string) =>
+		_.includes(possibleSquares, boardSettings.longCastle)
+		&& (CurrentTurn === boardSettings.whiteTurn ? /([bcd]1)/.test(square) : /([bcd]8)/.test(square));
 
 	const resetSquare = () => {
 		props.setClickedPiece('');
 		props.setPossibleSquares([]);
 	};
-	const includeSquare = (possibleSquares, square) => {
+
+	const includeSquare = (possibleSquares: string[], square: string) => {
 		return (
 			_.includes(possibleSquares, square) ||
-			_.includes(possibleSquares, 'O-O') ||
-			_.includes(possibleSquares, 'O-O-O')
+			_.includes(possibleSquares, boardSettings.shortCastle) ||
+			_.includes(possibleSquares, boardSettings.longCastle)
 		);
 	};
 
@@ -42,7 +58,7 @@ const Cell = (props) => {
 		const possibleSquares = board.possibleSquares;
 
 		if (isSameSquare(squareFrom, square)) {
-			resetSquare(squareFrom, square);
+			resetSquare();
 		}
 
 		if (includeSquare(possibleSquares, square) && canMove(chess, squareFrom, square)) {
@@ -79,10 +95,12 @@ const Cell = (props) => {
 	};
 
 	const renderInCheck = () => {
+		let whiteKing = boardSettings.findPiece("K").name;
+		let blackKing = boardSettings.findPiece("k").name;
 		if (
 			board.inCheck &&
-			((board.turn === 'w' && piece === boardSettings.pieces.white.king.name) ||
-				(board.turn === 'b' && piece === boardSettings.pieces.black.king.name))
+			((board.turn === boardSettings.whiteTurn && piece === whiteKing) ||
+				(board.turn === boardSettings.blackTurn && piece === blackKing))
 		) {
 			return (
 				<div
@@ -159,7 +177,7 @@ const Cell = (props) => {
 		);
 	};
 
-	const renderOverlay = (board, color) => {
+	const renderOverlay = (board : Board, color:string) => {
 		if (
 			_.includes(board.possibleSquares, square) ||
 			canRenderShortCastle(board.possibleSquares, board.turn, square) ||
@@ -210,20 +228,20 @@ const Cell = (props) => {
 	};
 
 	return (
-		<div className="col p-0" onClick={movePiece} key={props.cell} style={{ zIndex: 0, backgroundColor: cor }}>
+		<div className="col p-0" onClick={movePiece} key={props.piece} style={{ zIndex: 0, backgroundColor: cor }}>
 			{renderInCheck()}
 			{RenderLast()}
 			{renderOverlay(board, 'green')}
 			{renderColNumbers()}
 			{renderRowLetters()}
-			{piece !== '' && <Piece piece={boardSettings.findPiece(piece)} square={square} />}
+			{piece !== '' && <BoardPiece piece={boardSettings.findPiece(piece)} square={square} />}
 		</div>
 	);
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state:any) => {
 	return {
 		board: state.board
 	};
 };
-export default connect(mapStateToProps, { setPossibleSquares, setClickedPiece, setBoardState })(Cell);
+export default connect(mapStateToProps, { setPossibleSquares, setClickedPiece, setBoardState })(BoardCell);

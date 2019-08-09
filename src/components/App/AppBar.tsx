@@ -6,12 +6,12 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import * as board from './board.js';
+import * as board from '../../board';
 import { connect } from 'react-redux';
 import * as Chess from 'chess.js'
 
 
-import {rootReducer} from './Redux/rootReducer';
+import {rootReducer} from '../../Redux/rootReducer';
 const {actions} = rootReducer;
 const {setFen ,setBoardState} = actions;
 
@@ -21,7 +21,15 @@ const styles = {
 	}
 };
 
-const NavBar = (props) => {
+interface Props{
+	setBoardState : Function;
+	setFen : Function;
+	classes : {
+		root: any;
+	}
+}
+
+const NavBar = (props : Props) => {
 	const { classes } = props;
 	const resetar = () => {
 		const chess = new Chess();
@@ -36,7 +44,6 @@ const NavBar = (props) => {
 			jogadas: []
 		});
 		//board.chess.load(board.startPosition);
-		//setGlobal(board.initialSettings);
 	};
 	const loadPgn = () => {
 		props.setFen('rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2')
@@ -68,13 +75,9 @@ const NavBar = (props) => {
 	);
 };
 
-NavBar.propTypes = {
-	classes: PropTypes.object.isRequired
-};
-
-const mapStateToProps = (state) => {
-	return {
-		fen: state.fen
-	};
+const mapStateToProps = (state: any) => {
+	return ({
+		fen: state.board.fen
+	});
 };
 export default connect(mapStateToProps, {setFen,setBoardState})(withStyles(styles)(NavBar));
