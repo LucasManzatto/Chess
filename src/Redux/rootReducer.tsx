@@ -49,14 +49,14 @@ export const rootReducer = createSlice({
                 checkmate,
                 lastSquares,
                 possibleSquares,
-                jogadas
+                newMove
             } = action.payload
             state.fen = fen
             state.turn = turn
             state.checkmate = checkmate
             state.lastSquares = lastSquares
             state.possibleSquares = possibleSquares
-            state.jogadas = jogadas
+            state.jogadas.push(newMove)
             state.pgn = pgn
         },
     }

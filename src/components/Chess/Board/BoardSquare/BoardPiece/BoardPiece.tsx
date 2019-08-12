@@ -1,11 +1,16 @@
-/* eslint-disable no-unused-vars */
+//REACT IMPORTS
 import React from 'react';
-import { connect } from 'react-redux';
+
+//LIBRARY IMPORTS
 import * as Chess from 'chess.js';
 import _ from 'lodash';
 
-import { rootReducer } from '../../../Redux/rootReducer';
-import { Piece } from '../../../Models/Piece';
+//PROJECT IMPORTS
+import { Piece } from '../../../../../Models/Piece';
+
+//REDUX IMPORTS
+import { connect } from 'react-redux';
+import { rootReducer } from '../../../../../Redux/rootReducer';
 const {actions} = rootReducer;
 const { setClickedPiece, setPossibleSquares }  = actions;
 
@@ -17,11 +22,11 @@ interface Props{
 	piece : Piece;
 }
 
-const BoardPiece = (props:Props) => {
-	const getPossibleSquares = (moves: string[]) => {
-		return moves.map((move) => _.replace(move, /(.[x]|([N].(?![1-9]))|([QKRNB+#]))/g, ''));
-	};
+const getPossibleSquares = (moves: string[]) => {
+	return moves.map((move) => _.replace(move, /(.[x]|([N].(?![1-9]))|([QKRNB+#]))/g, ''));
+};
 
+const BoardPiece = (props:Props) => {
 	const handleClick = () => {
 		const chess = new Chess(props.fen);
 		props.setClickedPiece(props.square);

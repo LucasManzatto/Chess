@@ -6,14 +6,9 @@ interface Props{
 	pecas: string[];
 }
 
-interface BoardPiece{
-	name: string;
-	img: string;
-}
-
 const Capturadas = (props: Props) => {
 	return props.pecas.map((piece) => {
-		const boardPiece: BoardPiece= board.findPiece(piece);
+		const boardPiece = board.findPiece(piece);
 		return <img key={boardPiece.name} alt="" height={'100%'} src={boardPiece.img} />;
 	});
 };

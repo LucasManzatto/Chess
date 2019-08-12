@@ -1,18 +1,26 @@
+//REACT IMPORTS
 import React, { Fragment } from 'react';
-import { connect } from 'react-redux';
+
+//MATERIAL IMPORTS
+
+//PROJECT IMPORTS
 import Board from './Board/Board';
-
-import Jogadas from './Moves/Moves';
-
-import { withStyles } from '@material-ui/core/styles';
-
+import Moves from './Moves/Moves';
 import Pgn from './Pgn';
 import Fen from './Fen';
 import Openings from './Openings/Openings';
+import { Board as BoardModel } from './../../Models/Board';
 
-const styles = {};
+//LIBRARIES IMPORTS
 
-const Chess = (props: any) => {
+//REDUX IMPORTS
+import { connect } from 'react-redux';
+
+interface Props{
+	board: BoardModel;
+}
+
+const Chess = (props: Props) => {
 	return (
 		<Fragment>
 				<div className="col-3 mt-3 mb-4">
@@ -36,7 +44,7 @@ const Chess = (props: any) => {
 				</div>
 				<div className="offset-1 col-2">
 					<div className="row">
-						<Jogadas />
+						<Moves />
 					</div>
 				</div>
 		</Fragment>
@@ -47,4 +55,4 @@ const mapStateToProps = (state: any) => {
 	return { board: state.board };
 };
 
-export default connect(mapStateToProps, {})(withStyles(styles)(Chess));
+export default connect(mapStateToProps, {})(Chess);

@@ -20,7 +20,6 @@ import {rootReducer }from '../../../Redux/rootReducer';
 const {actions} = rootReducer;
 const { setFen, setJogadas}  = actions;
 
-
 const Openings = (props: any) => {
 	const { openings} = props;
 

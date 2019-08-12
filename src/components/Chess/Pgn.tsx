@@ -1,7 +1,13 @@
+//REACT IMPORTS
 import React from 'react';
+
+// MATERIAL IMPORTS
 import {Typography }from '@material-ui/core';
 
-const Pgn = (props:any) => {
+interface Props{
+	pgn: string;
+}
+const Pgn = (props:Props) => {
 	return (
 		<Typography align="left" color="secondary">
 			PGN: {props.pgn}

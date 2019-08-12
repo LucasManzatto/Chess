@@ -3,8 +3,7 @@ import { Pieces, Piece } from './Models/Piece';
 import _ from 'lodash'
 
 
-const baseUrl = 'https://upload.wikimedia.org/wikipedia/commons/thumba';
-
+const baseUrl = 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Chess_plt45.svg/240px-Chess_plt45.svg.png';
 
 export const whiteTurn ='w';
 export const blackTurn = 'b';
@@ -80,9 +79,14 @@ export const pieces : Pieces = {
 
 export const isWhite = (pieceName: string) => pieceName === pieceName.toUpperCase();
 
-export const findPiece = (piece: string) : Piece => isWhite(piece)
+export const findPiece = (piece: string) : Piece => {
+    if(!["p","n","b","q","k","r"].includes(piece.toLowerCase())){
+        piece = "p";
+    }
+    return isWhite(piece)
     ? _.find(pieces.white, (p: Piece) => p.name === piece)
     : _.find(pieces.black, (p: Piece) => p.name === piece)
+}
 
 
 export const chess = new Chess();

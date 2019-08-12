@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useState, Fragment } from 'reactn';
+import React, { useState, Fragment } from 'react';
 import { connect } from 'react-redux';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -14,6 +14,8 @@ import _ from 'lodash';
 import { Typography, Button } from '@material-ui/core';
 
 import {rootReducer }from '../../../Redux/rootReducer';
+import { Move } from '../../../Models/Move';
+import { LastSquares } from '../../../Models/Board';
 const {actions} = rootReducer;
 const { setFen, setJogadas, setPgn, setBoardState }  = actions;
 
@@ -21,22 +23,22 @@ const OpeningItem = (props:any) => {
 	const [ open, setOpen ] = useState(false);
 	const { opening, setPgn, setBoardState } = props;
 
-	function handleClick(pgn) {
-		let move;
+	function handleClick(pgn : string) {
+		let move : LastSquares = {from: "", to:""};
 		const chess = new Chess();
 		chess.load_pgn(pgn);
 		const chessAux = new Chess();
-		let jogadas = [];
-		chess.history().map((jogada) => {
-			const turno = chessAux.turn();
-			move = chessAux.move(jogada);
-			jogadas.push({
+		let moves : Move[] = [];
+		chess.history().map((notation: string) => {
+			const turn = chessAux.turn();
+			move = chessAux.move(notation);
+			moves.push({
 				fen: chessAux.fen(),
-				jogada,
-				turno,
-				posicao: { from: move.from, to: move.to }
+				notation,
+				turn,
+				lastSquares: { from: move.from, to: move.to }
 			});
-			return jogada;
+			return notation;
 		});
 		setBoardState({
 			fen: chess.fen(),
@@ -45,7 +47,7 @@ const OpeningItem = (props:any) => {
 			inCheck: chess.in_check(),
 			lastSquares: { from: move.from, to: move.to },
 			possibleSquares: [],
-			jogadas
+			jogadas: moves
 		});
 		setPgn(pgn);
 		// setJogadas(jogadas);
@@ -57,11 +59,12 @@ const OpeningItem = (props:any) => {
 		// setFen(chess.fen());
 	}
 
-	const SubOpening = ({ subOpenings, openingName }) => {
+	const SubOpening = (props: any) => {
+		const { subOpenings, openingName } = props;
 		return (
 			<Collapse in={open} timeout="auto" unmountOnExit>
-				<List component="div">
-					{_.map(subOpenings, (subOpening) => (
+				<List component="nav">
+					{_.map(subOpenings, (subOpening: any) => (
 						<ListItem
 							style={{ paddingLeft: 30 }}
 							button
