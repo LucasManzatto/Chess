@@ -13,7 +13,7 @@ export const initialSettings : Board = {
     inCheck: false,
     checkmate: false,
     turn: 'w',
-    jogadas: [],
+    moves: [],
     lastSquares: {
         from: '',
         to: ''

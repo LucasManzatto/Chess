@@ -19,21 +19,22 @@ import Move from './Move';
 import _ from 'lodash';
 
 //REDUX IMPORTS
-import {rootReducer} from '../../../Redux/rootReducer';
+import { rootReducer } from '../../../Redux/rootReducer';
 import { Move as MoveModel } from '../../../Models/Move';
-const {actions} = rootReducer;
+import { Board } from '../../../Models/Board';
+const { actions } = rootReducer;
 const { setBoardState } = actions;
 
-interface Props{
-	moves : MoveModel[]
+interface Props {
+	moves: MoveModel[]
 }
 
-const createMoves = (moves : MoveModel[]) => {
-	const movesGrouped = _.groupBy(moves,(move: MoveModel) => move.turn);
+const createMoves = (moves: MoveModel[]) => {
+	const movesGrouped = _.groupBy(moves, (move: MoveModel) => move.turn);
 	return _.zip(movesGrouped.w, movesGrouped.b);
 };
 
-function Moves(props:Props) {
+function Moves(props: Props) {
 	let turnNumber = 1;
 	const movesZip = createMoves(props.moves);
 	return (
@@ -50,7 +51,7 @@ function Moves(props:Props) {
 						</ListSubheader>
 					}
 				>
-					{movesZip.map((movesRow : MoveModel[]) => {
+					{movesZip.map((movesRow: MoveModel[]) => {
 						const whiteMove = movesRow[0];
 						const blackMove = movesRow[1];
 						return (
@@ -67,7 +68,7 @@ function Moves(props:Props) {
 									<Move move={blackMove} />
 								</div>
 							</div>
-					);
+						);
 					})}
 				</List>
 			</Paper>
@@ -84,12 +85,13 @@ function Moves(props:Props) {
 	);
 }
 
-Moves.propTypes = {
-	classes: PropTypes.string.isRequired
+// Moves.propTypes = {
+// 	classes: PropTypes.string.isRequired
+// };
+
+const mapStateToProps = (state: any) => {
+	const board: Board = state.board;
+	return { moves: board.moves };
 };
 
-const mapStateToProps = (state:any) => {
-	return { jogadas: state.board.jogadas };
-};
-
-export default connect(mapStateToProps, {setBoardState })(Moves);
+export default connect(mapStateToProps, { setBoardState })(Moves);

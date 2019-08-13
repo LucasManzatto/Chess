@@ -7,7 +7,6 @@ import { Board } from '../Models/Board';
 import { Action } from './../Models/Action';
 
 import {
-
     initialSettings
 } from './initialSettings'
 
@@ -18,7 +17,7 @@ export const rootReducer = createSlice({
             state.fen = action.payload
         },
         setJogadas :(state :Board,action : Action) => {
-            state.jogadas = action.payload
+            state.moves = action.payload
         },
         setClickedPiece : (state :Board,action : Action) => {
             state.clickedPiece = action.payload
@@ -46,6 +45,7 @@ export const rootReducer = createSlice({
                 fen,
                 pgn,
                 turn,
+                inCheck,
                 checkmate,
                 lastSquares,
                 possibleSquares,
@@ -54,9 +54,10 @@ export const rootReducer = createSlice({
             state.fen = fen
             state.turn = turn
             state.checkmate = checkmate
+            state.inCheck = inCheck
             state.lastSquares = lastSquares
             state.possibleSquares = possibleSquares
-            state.jogadas.push(newMove)
+            state.moves.push(newMove)
             state.pgn = pgn
         },
     }

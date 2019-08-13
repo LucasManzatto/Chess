@@ -1,27 +1,28 @@
 //REACT IMPORTS
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
 
 //PROJECT IMPORTS
-import * as boardSettings from '../../../../board';
+import * as boardSettings from '../../../../../board';
+import { Turn } from '../../../../../Models/Turn';
+import { Piece } from '../../../../../Models/Board';
 
-interface Props{
-    piece:string;
+interface Props {
+    piece: Piece;
     inCheck: boolean;
-    turn: string;
+    turn: Turn;
 }
 
-const isWhiteTurn = (turn: string) => turn === boardSettings.whiteTurn;
+const isWhiteTurn = (turn: Turn) => turn === boardSettings.whiteTurn;
 
-const isBlackTurn = (turn: string) => turn === boardSettings.blackTurn;
+const isBlackTurn = (turn: Turn) => turn === boardSettings.blackTurn;
 
-const InCheck = (props: Props) => {
-    let whiteKing = boardSettings.findPiece("K").name;
-    let blackKing = boardSettings.findPiece("k").name;
+const Check = (props: Props) => {
+    let whiteKing :Piece= "K";
+    let blackKing :Piece ="k";
 
     return props.inCheck &&
         ((isWhiteTurn(props.turn) && props.piece === whiteKing) ||
-        (isBlackTurn(props.turn) && props.piece === blackKing))
+            (isBlackTurn(props.turn) && props.piece === blackKing))
         ? (
             <div
                 style={{
@@ -34,8 +35,8 @@ const InCheck = (props: Props) => {
                     backgroundColor: 'red'
                 }}
             />
-            )
+        )
         : <Fragment></Fragment>
 };
 
-export default InCheck;
+export default Check;

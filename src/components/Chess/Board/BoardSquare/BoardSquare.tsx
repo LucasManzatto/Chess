@@ -2,13 +2,17 @@
 import React from 'react';
 
 //MATERIAL IMPORTS
-import { Typography } from '@material-ui/core';
 
 //PROJECT IMPORTS
 import BoardPiece from './BoardPiece/BoardPiece';
-import { Board } from '../../../../Models/Board';
+import { Board, Piece, Square } from '../../../../Models/Board';
 import { Move } from '../../../../Models/Move';
 import * as boardSettings from '../../../../board';
+import Check from './Overlay/Check';
+import Last from './Overlay/Last';
+import ColumnNumber from './Overlay/ColumnNumber';
+import Overlay from './Overlay/Overlay';
+import RowLetter from './Overlay/RowLetter';
 
 //LIBRARY IMPORTS
 import * as Chess from 'chess.js';
@@ -17,22 +21,14 @@ import _ from 'lodash';
 //REDUX IMPORTS
 import { connect } from 'react-redux';
 import { rootReducer } from '../../../../Redux/rootReducer';
-import InCheck from './InCheck';
-import Last from './Last';
-import ColumnNumber from './ColumnNumber';
-import Overlay from './Overlay';
-import RowLetter from './RowLetter';
 const { actions } = rootReducer;
 const { setPossibleSquares, setClickedPiece, setBoardState } = actions;
 
 
-const lightSquare = '#F1D9B7';
-const darkSquare = '#B28A63';
-
 interface Props {
 	board: Board;
-	piece: string;
-	square: string;
+	piece: Piece;
+	square: Square;
 	squareColor: string;
 	setClickedPiece: Function;
 	setPossibleSquares: Function;
@@ -41,16 +37,16 @@ interface Props {
 
 const BoardSquare = (props: Props) => {
 
-	const isSameSquare = (from: string, to: string) => from === to;
+	const isSameSquare = (from: Square, to: Square) => from === to;
 
-	const canMove = (chess: any, from: string, to: string) => chess.move({ from, to, promotion: 'q' }) != null;
+	const canMove = (chess: any, from: Square, to: Square) => chess.move({ from, to, promotion: 'q' }) != null;
 
 	const resetSquare = () => {
 		props.setClickedPiece('');
 		props.setPossibleSquares([]);
 	};
 
-	const includeSquare = (possibleSquares: string[], square: string) => {
+	const includeSquare = (possibleSquares: Square[], square: Square) => {
 		return (
 			_.includes(possibleSquares, square) ||
 			_.includes(possibleSquares, boardSettings.shortCastle) ||
@@ -92,7 +88,7 @@ const BoardSquare = (props: Props) => {
 	return (
 		<div className="col p-0" onClick={movePiece} key={props.piece} style={{ zIndex: 0, backgroundColor: props.squareColor }}>
 
-			<InCheck inCheck={props.board.inCheck}
+			<Check inCheck={props.board.inCheck}
 				piece={props.piece}
 				turn={props.board.turn} />
 

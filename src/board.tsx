@@ -1,12 +1,15 @@
 import * as Chess from 'chess.js';
 import { Pieces, Piece } from './Models/Piece';
 import _ from 'lodash'
+import { Turn } from './Models/Turn';
 
 
-const baseUrl = 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Chess_plt45.svg/240px-Chess_plt45.svg.png';
+const baseUrl = 'https://marcelk.net/chess/pieces/merida/320/';
 
-export const whiteTurn ='w';
-export const blackTurn = 'b';
+const createImgUrl = (piece:string) => `${baseUrl}${piece}.png`
+
+export const whiteTurn :Turn='w';
+export const blackTurn :Turn='b';
 export const shortCastle = "O-O";
 export const longCastle = "O-O-O";
 
@@ -14,64 +17,64 @@ export const pieces : Pieces = {
     white :[
         {
             name: 'P',
-            img: `${baseUrl}/4/45/Chess_plt45.svg/240px-Chess_plt45.svg.png`,
+            img: createImgUrl("WhitePawn"),
             asciiImg : ''
         },
         {
             name: 'N',
-            img: `${baseUrl}/7/70/Chess_nlt45.svg/240px-Chess_nlt45.svg.pgn`,
+            img: createImgUrl("WhiteKnight"),
             asciiImg : '♘'
         },
         {
             name: 'B',
-            img: `${baseUrl}/b/b1/Chess_blt45.svg/240px-Chess_blt45.svg.pgn`,
+            img: createImgUrl("WhiteBishop"),
             asciiImg: '♗'
         },
         {
             name: 'Q',
-            img: `${baseUrl}/1/15/Chess_qlt45.svg/240px-Chess_qlt45.svg.pgn`,
+            img: createImgUrl("WhiteQueen"),
             asciiImg: '♕'
         },
         {
             name: 'K',
-            img: `${baseUrl}/4/42/Chess_klt45.svg/240px-Chess_klt45.svg.pgn`,
+            img: createImgUrl("WhiteKing"),
             asciiImg: '♔'
         },
         {
             name: 'R',
-            img: `${baseUrl}/7/72/Chess_rlt45.svg/240px-Chess_rlt45.svg.pgn`,
+            img: createImgUrl("WhiteRook"),
             asciiImg: '♖'
         },
     ],
     black:[
         {
             name: 'p',
-            img: `${baseUrl}/c/c7/Chess_pdt45.svg/240px-Chess_pdt45.svg.pgn`,
+            img: createImgUrl("BlackPawn"),
             asciiImg: ''
         },
         {
             name: 'n',
-            img: `${baseUrl}/e/ef/Chess_ndt45.svg/240px-Chess_ndt45.svg.pgn`,
+            img: createImgUrl("BlackKnight"),
             asciiImg : '♞'
         },
         {
             name: 'b',
-            img: `${baseUrl}/9/98/Chess_bdt45.svg/240px-Chess_bdt45.svg.pgn`,
+            img: createImgUrl("BlackBishop"),
             asciiImg: '♝'
         },
         {
             name: 'q',
-            img: `${baseUrl}/4/47/Chess_qdt45.svg/240px-Chess_qdt45.svg.pgn`,
+            img: createImgUrl("BlackQueen"),
             asciiImg:'♛'
         },
         {
             name: 'k',
-            img: `${baseUrl}/f/f0/Chess_kdt45.svg/240px-Chess_kdt45.svg.pgn`,
+            img: createImgUrl("BlackKing"),
             asciiImg:'♚'
         },
         {
             name: 'r',
-            img: `${baseUrl}/f/ff/Chess_rdt45.svg/240px-Chess_rdt45.svg.pgn`,
+            img: createImgUrl("BlackRook"),
             asciiImg: '♜'
         },
     ]

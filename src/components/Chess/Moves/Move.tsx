@@ -42,7 +42,7 @@ const Move = (props : Props) => {
 
 	const goToMove = (move : MoveModel) => {
         props.setFen(move.fen);
-        props.setLastSquares(move.position);
+        props.setLastSquares(move.lastSquares);
         props.setPossibleSquares([]);
 	};
 

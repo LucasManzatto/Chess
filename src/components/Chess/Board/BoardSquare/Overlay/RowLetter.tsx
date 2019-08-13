@@ -1,17 +1,20 @@
 //REACT IMPORTS
-import React,{ Fragment } from "react";
+import React, { Fragment } from "react";
 
 //MATERIAL IMPORTS
 import { Typography } from "@material-ui/core";
 
-interface Props{
-    square: string;
+//PROJECT IMPORTS
+import { Square } from "../../../../../Models/Board";
+
+interface Props {
+    square: Square;
     squareColor: string;
 }
 
-const RowLetter = (props:Props) => {
-    return /(1)/.test(props.square) 
-            ? (
+const RowLetter = (props: Props) => {
+    return /(1)/.test(props.square)
+        ? (
             <div
                 style={{
                     pointerEvents: 'none',
@@ -21,9 +24,9 @@ const RowLetter = (props:Props) => {
                     opacity: 0.8
                 }}
             >
-                <Typography style={{ color: props.squareColor}}>{props.square.charAt(0)}</Typography>
+                <Typography style={{ color: props.squareColor }}>{props.square.charAt(0)}</Typography>
             </div>
-             )
-            : <Fragment></Fragment>
+        )
+        : <Fragment></Fragment>
 };
 export default RowLetter;

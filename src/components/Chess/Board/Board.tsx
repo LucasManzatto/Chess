@@ -37,20 +37,19 @@ const Board = (props: Props) => {
 		);
 	};
 
-	const renderEmptyCells = (squaresNumber:number) => _.map(_.repeat(' ',squaresNumber), () => renderCell(''));
+	const renderEmptySquares = (squaresNumber:number) => _.map(_.repeat(' ',squaresNumber), () => renderCell(''));
+
+	const fenIsEmptySquares = (square: string) => _.isNumber(parseInt(square)) && !_.isNaN(parseInt(square));
+
 	return fenBoard.map(boardRow => {
 		squareColor = squareColor === lightSquare ? darkSquare : lightSquare;
 		let boardSquares : string[] = _.split(boardRow, '');
 		return (
 			<div key={rowNumber--} className="row justify-content-center" style={{ height: '12.5%' }}>
-				{boardSquares.map((boardCell) => {
-					const isEmptySquares = _.isNumber(parseInt(boardCell)) && !_.isNaN(parseInt(boardCell));
-					//checa se é um numero e adiciona os campos vazios
-					return isEmptySquares
-						? //Cria o numero de quadrados vazios a partir do FEN
-							renderEmptyCells(parseInt(boardCell))
-						: //senao adiciona a peça no quadrado
-							renderCell(boardCell);
+				{boardSquares.map((square) => {
+					return fenIsEmptySquares(square)
+						? renderEmptySquares(parseInt(square))
+						: renderCell(square);
 				})}
 			</div>
 		);

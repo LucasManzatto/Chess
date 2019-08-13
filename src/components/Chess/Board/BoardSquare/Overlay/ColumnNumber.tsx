@@ -4,8 +4,11 @@ import React, { Fragment } from "react";
 //MATERIAL IMPORTS
 import { Typography } from "@material-ui/core";
 
-interface Props{
-	square : string;
+//PROJECT IMPORTS
+import { Square } from "../../../../../Models/Board";
+
+interface Props {
+	square: Square;
 	squareColor: string;
 }
 
@@ -25,7 +28,7 @@ const ColumnNumber = (props: Props) => {
 			>
 				<Typography style={{ color: props.squareColor }}>{props.square.charAt(1)}</Typography>
 			</div>
-			)
+		)
 		: <Fragment></Fragment>
 };
 export default ColumnNumber;
