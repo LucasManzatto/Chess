@@ -17,26 +17,43 @@ import Move from './Move';
 
 // LIBRARIES IMPORT
 import _ from 'lodash';
+import * as Chess from 'chess.js';
 
 //REDUX IMPORTS
 import { rootReducer } from '../../../Redux/rootReducer';
-import { Move as MoveModel } from '../../../Models/Move';
 import { Board } from '../../../Models/Board';
+import { State } from '../../../Models/State';
 const { actions } = rootReducer;
 const { setBoardState } = actions;
 
 interface Props {
-	moves: MoveModel[]
+	movesHistory: Board[]
+	fen: string;
+	setBoardState: Function;
 }
 
-const createMoves = (moves: MoveModel[]) => {
-	const movesGrouped = _.groupBy(moves, (move: MoveModel) => move.turn);
+const createMoves = (moves: Board[]) => {
+	const movesGrouped = _.groupBy(moves, (move: Board) => move.turn);
 	return _.zip(movesGrouped.w, movesGrouped.b);
 };
 
-function Moves(props: Props) {
-	let turnNumber = 1;
-	const movesZip = createMoves(props.moves);
+const Moves = (props:Props) =>{
+	const movesZip = createMoves(props.movesHistory);
+
+	const rewindMove = () =>{
+		const lastMove :Board= _.find(props.movesHistory,(move: Board) => move.fen === props.fen);
+		const chess = new Chess(lastMove.fen);
+		console.log(chess.pgn())
+		props.setBoardState({
+			fen: chess.fen(),
+			pgn: chess.pgn(),
+			turn: chess.turn(),
+			checkmate: chess.in_checkmate(),
+			inCheck: chess.in_check(),
+			lastSquares: lastMove.lastSquares,
+			possibleSquares: [],
+		});
+	}
 	return (
 		<div className="col">
 			<Paper elevation={0} square={true} className="mt-3" style={{ width: '100%', minWidth: '100%' }}>
@@ -51,14 +68,14 @@ function Moves(props: Props) {
 						</ListSubheader>
 					}
 				>
-					{movesZip.map((movesRow: MoveModel[]) => {
+					{movesZip.map((movesRow: Board[], turnNumber: number) => {
 						const whiteMove = movesRow[0];
 						const blackMove = movesRow[1];
 						return (
 							<div key={whiteMove.fen} className="row align-items-center no-gutters">
 								<div className="col-2">
 									<Typography align="center" color="secondary">
-										{`${turnNumber++}.`}
+										{`${turnNumber + 1}.`}
 									</Typography>
 								</div>
 								<div className="col-5">
@@ -74,7 +91,7 @@ function Moves(props: Props) {
 			</Paper>
 			<div className="row justify-content-center">
 				<div className="col-5">
-					<FastRewind color="secondary" cursor="pointer" />
+					<FastRewind onClick={rewindMove} color="secondary" cursor="pointer" />
 				</div>
 				<div className="col-5">
 					<FastForward color="secondary" cursor="pointer" />
@@ -91,7 +108,8 @@ function Moves(props: Props) {
 
 const mapStateToProps = (state: any) => {
 	const board: Board = state.board;
-	return { moves: board.moves };
+	const app : State = state.app;
+	return { moves: app.boardHistory , fen: board.fen};
 };
 
 export default connect(mapStateToProps, { setBoardState })(Moves);

@@ -2,7 +2,8 @@
 import React, { Fragment } from 'react';
 
 //PROJECT IMPORTS
-import { LastSquares, Square } from "../../../../../Models/Board";
+import { LastSquares } from '../../../../../Models/LastSquares';
+import { Square } from '../../../../../Models/Square';
 
 //LIBRARY IMPORTS
 import _ from 'lodash';

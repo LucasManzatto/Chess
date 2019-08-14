@@ -3,14 +3,17 @@ import React, { Fragment } from 'react';
 
 //PROJECT IMPORTS
 import * as boardSettings from '../../../../../board';
-import { Board, Square, Piece } from '../../../../../Models/Board';
+import { State, Piece } from '../../../../../Models/State';
 import { Turn } from '../../../../../Models/Turn';
+import { Square } from '../../../../../Models/Square';
+import { Board } from '../../../../../Models/Board';
 
 //LIBRARY IMPORTS
 import _ from 'lodash';
 
 interface Props {
     board: Board;
+    app: State;
     square: Square;
     piece: Piece;
     squareColor: string;
@@ -28,9 +31,9 @@ const canRenderLongCastle = (possibleSquares: Square[], CurrentTurn: Turn, squar
 
 const Overlay = (props: Props) => {
     if (
-        _.includes(props.board.possibleSquares, props.square) ||
-        canRenderShortCastle(props.board.possibleSquares, props.board.turn, props.square) ||
-        canRenderLongCastle(props.board.possibleSquares, props.board.turn, props.square)
+        _.includes(props.app.possibleSquares, props.square) ||
+        canRenderShortCastle(props.app.possibleSquares, props.board.turn, props.square) ||
+        canRenderLongCastle(props.app.possibleSquares, props.board.turn, props.square)
     ) {
         if (props.piece === '') {
             return (

@@ -9,7 +9,7 @@ import Moves from './Moves/Moves';
 import Pgn from './Pgn';
 import Fen from './Fen';
 import Openings from './Openings/Openings';
-import { Board as BoardModel } from './../../Models/Board';
+import {Board as BoardModel} from '../../Models/Board';
 
 //LIBRARIES IMPORTS
 

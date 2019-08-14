@@ -5,14 +5,15 @@ import React from 'react';
 
 //PROJECT IMPORTS
 import BoardPiece from './BoardPiece/BoardPiece';
-import { Board, Piece, Square } from '../../../../Models/Board';
-import { Move } from '../../../../Models/Move';
+import { State, Piece } from '../../../../Models/State';
+import { Board } from '../../../../Models/Board';
 import * as boardSettings from '../../../../board';
 import Check from './Overlay/Check';
 import Last from './Overlay/Last';
 import ColumnNumber from './Overlay/ColumnNumber';
 import Overlay from './Overlay/Overlay';
 import RowLetter from './Overlay/RowLetter';
+import { Square } from '../../../../Models/Square';
 
 //LIBRARY IMPORTS
 import * as Chess from 'chess.js';
@@ -20,12 +21,11 @@ import _ from 'lodash';
 
 //REDUX IMPORTS
 import { connect } from 'react-redux';
-import { rootReducer } from '../../../../Redux/rootReducer';
-const { actions } = rootReducer;
-const { setPossibleSquares, setClickedPiece, setBoardState } = actions;
-
+import {boardReducer} from '../../../../Redux/boardReducer';
+import { rootReducer } from './../../../../Redux/rootReducer';
 
 interface Props {
+	app: State;
 	board: Board;
 	piece: Piece;
 	square: Square;
@@ -33,6 +33,7 @@ interface Props {
 	setClickedPiece: Function;
 	setPossibleSquares: Function;
 	setBoardState: Function;
+	addMoveToHistory : Function;
 }
 
 const BoardSquare = (props: Props) => {
@@ -57,31 +58,25 @@ const BoardSquare = (props: Props) => {
 	const movePiece = () => {
 		const chess = new Chess();
 		chess.load_pgn(props.board.pgn);
-		const squareFrom = props.board.clickedPiece;
-		const possibleSquares = props.board.possibleSquares;
+		const squareFrom = props.app.clickedPiece;
+		const possibleSquares = props.app.possibleSquares;
 
 		if (isSameSquare(squareFrom, props.square)) {
 			resetSquare();
 		}
 
 		if (includeSquare(possibleSquares, props.square) && canMove(chess, squareFrom, props.square)) {
-			const newMove: Move = {
-				fen: chess.fen(),
-				jogada: chess.history().slice(-1),
-				turn: props.board.turn,
-				lastSquares: { from: squareFrom, to: props.square }
-			};
-
-			props.setBoardState({
+			const boardState: Board = {
 				fen: chess.fen(),
 				pgn: chess.pgn(),
-				turn: chess.turn(),
 				checkmate: chess.in_checkmate(),
 				inCheck: chess.in_check(),
+				notation: chess.history().slice(-1)[0],
+				turn: props.board.turn,
 				lastSquares: { from: squareFrom, to: props.square },
-				possibleSquares: [],
-				newMove
-			});
+			};
+			props.setBoardState(boardState);
+			props.addMoveToHistory({newMove: boardState});
 		}
 	};
 
@@ -94,7 +89,7 @@ const BoardSquare = (props: Props) => {
 
 			<Last lastSquares={props.board.lastSquares}
 				square={props.square}
-				possibleSquares={props.board.possibleSquares} />
+				possibleSquares={props.app.possibleSquares} />
 
 			<ColumnNumber square={props.square}
 				squareColor={props.squareColor} />
@@ -103,18 +98,21 @@ const BoardSquare = (props: Props) => {
 				squareColor={props.squareColor} />
 
 			<Overlay board={props.board}
+				app={props.app}
 				square={props.square}
 				squareColor={props.squareColor}
 				piece={props.piece} />
 
-			{props.piece !== '' && <BoardPiece piece={boardSettings.findPiece(props.piece)} square={props.square} />}
+			<BoardPiece piece={props.piece} square={props.square} />
 		</div>
 	);
 };
 
 const mapStateToProps = (state: any) => {
 	return {
-		board: state.board
+		board: state.board,
+		app: state.app
 	};
 };
-export default connect(mapStateToProps, { setPossibleSquares, setClickedPiece, setBoardState })(BoardSquare);
+
+export default connect(mapStateToProps, {...rootReducer.actions,...boardReducer.actions})(BoardSquare);

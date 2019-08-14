@@ -4,7 +4,7 @@ import React, { Fragment } from 'react';
 //PROJECT IMPORTS
 import * as boardSettings from '../../../../../board';
 import { Turn } from '../../../../../Models/Turn';
-import { Piece } from '../../../../../Models/Board';
+import { Piece } from '../../../../../Models/State';
 
 interface Props {
     piece: Piece;

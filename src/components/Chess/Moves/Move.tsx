@@ -12,38 +12,49 @@ import * as boardSettings from '../../../board';
 
 //LIBRARY IMPORTS
 import _ from 'lodash';
+import * as Chess from 'chess.js';
 
 //REDUX IMPORTS
 import {rootReducer} from '../../../Redux/rootReducer';
-import { Move as MoveModel } from '../../../Models/Move';
+import { Board} from '../../../Models/Board';
 import { Fragment } from 'react';
 const {actions} = rootReducer;
-const { setFen, setLastSquares, setPossibleSquares } = actions;
+const { setFen, setLastSquares, setPossibleSquares,setBoardState } = actions;
 
 interface Props{
-	move : MoveModel;
+	move : Board;
 	moveNotation : string;
 	setFen: Function;
 	setLastSquares : Function;
 	setPossibleSquares: Function;
+	setBoardState : Function;
 }
 
-const getMoveNotation = (moveObj: MoveModel) => {
-	const moveNotation = moveObj.jogada;
-	const piece = _.split(moveNotation, '')[0];
-	let pieceImage = boardSettings.findPiece(piece).asciiImg;
-	return pieceImage !== ""
-		? _.replace(moveNotation, piece, pieceImage)
-		: moveNotation;
+const isPawnMove = (notation:string) => notation.length === 2;
+
+const getASCIIMoveNotation = (notation: string) => {
+	if(isPawnMove(notation)){
+		return notation;
+	}
+	const piece = notation.charAt(0);
+	let pieceAsciiImg = boardSettings.findPiece(piece).asciiImg;
+	return _.replace(notation, piece, pieceAsciiImg);
 };
 
 
 const Move = (props : Props) => {
 
-	const goToMove = (move : MoveModel) => {
-        props.setFen(move.fen);
-        props.setLastSquares(move.lastSquares);
-        props.setPossibleSquares([]);
+	const goToMove = (move : Board) => {
+		const chess = new Chess(move.fen);
+		props.setBoardState({
+			fen: chess.fen(),
+			pgn: chess.pgn(),
+			turn: chess.turn(),
+			checkmate: chess.in_checkmate(),
+			inCheck: chess.in_check(),
+			lastSquares: move.lastSquares,
+			possibleSquares: [],
+		});
 	};
 
 	return props.move === undefined ? <Fragment></Fragment> :
@@ -52,7 +63,7 @@ const Move = (props : Props) => {
 			<ListItemText
 				primary={
 					<Typography align="center" color="secondary">
-						{getMoveNotation(props.move)}
+						{getASCIIMoveNotation(props.move.notation)}
 					</Typography>
 				}
 			/>
@@ -64,4 +75,4 @@ const mapStateToProps = (state:any) => {
 	return state;
 };
 
-export default connect(mapStateToProps, { setFen, setLastSquares, setPossibleSquares })(Move);
+export default connect(mapStateToProps, { setFen, setLastSquares, setPossibleSquares ,setBoardState})(Move);

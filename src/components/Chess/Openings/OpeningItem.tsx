@@ -1,21 +1,27 @@
-/* eslint-disable no-unused-vars */
+//REACT IMPORTS
 import React, { useState, Fragment } from 'react';
-import { connect } from 'react-redux';
+
+//MATERIAL IMPORTS
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import Collapse from '@material-ui/core/Collapse';
-import AddOpening from './AddOpening';
+import { Typography } from '@material-ui/core';
 
+//LIBRARY IMPORTS
 import * as Chess from 'chess.js';
 import _ from 'lodash';
-import { Typography, Button } from '@material-ui/core';
 
+//PROJECT IMPORTS
+import AddOpening from './AddOpening';
+import { Board } from '../../../Models/Board';
+import { LastSquares } from '../../../Models/LastSquares';
+
+//REDUX IMPORTS
+import { connect } from 'react-redux';
 import {rootReducer }from '../../../Redux/rootReducer';
-import { Move } from '../../../Models/Move';
-import { LastSquares } from '../../../Models/Board';
 const {actions} = rootReducer;
 const { setFen, setJogadas, setPgn, setBoardState }  = actions;
 
@@ -28,16 +34,16 @@ const OpeningItem = (props:any) => {
 		const chess = new Chess();
 		chess.load_pgn(pgn);
 		const chessAux = new Chess();
-		let moves : Move[] = [];
+		let moves : Board[] = [];
 		chess.history().map((notation: string) => {
 			const turn = chessAux.turn();
 			move = chessAux.move(notation);
-			moves.push({
-				fen: chessAux.fen(),
-				notation,
-				turn,
-				lastSquares: { from: move.from, to: move.to }
-			});
+			// moves.push({
+			// 	fen: chessAux.fen(),
+			// 	notation,
+			// 	turn,
+			// 	lastSquares: { from: move.from, to: move.to }
+			// });
 			return notation;
 		});
 		setBoardState({

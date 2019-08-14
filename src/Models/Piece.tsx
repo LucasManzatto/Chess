@@ -1,4 +1,4 @@
-import {Piece as PieceType} from '../Models/Board';
+import {Piece as PieceType} from './State';
 export interface Pieces{
     white: Piece[];
     black: Piece[];

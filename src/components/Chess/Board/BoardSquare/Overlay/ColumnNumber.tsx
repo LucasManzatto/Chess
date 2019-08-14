@@ -5,7 +5,7 @@ import React, { Fragment } from "react";
 import { Typography } from "@material-ui/core";
 
 //PROJECT IMPORTS
-import { Square } from "../../../../../Models/Board";
+import { Square } from "../../../../../Models/Square";
 
 interface Props {
 	square: Square;
