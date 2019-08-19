@@ -1,5 +1,5 @@
 // REACT IMPORTS
-import React from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 
 // MATERIAL IMPORTS
@@ -9,31 +9,27 @@ import { Typography } from '@material-ui/core';
 
 //PROJECT IMPORTS
 import * as boardSettings from '../../../board';
+import { Board } from '../../../Models/Board';
 
 //LIBRARY IMPORTS
 import _ from 'lodash';
-import * as Chess from 'chess.js';
 
 //REDUX IMPORTS
-import {rootReducer} from '../../../Redux/rootReducer';
-import { Board} from '../../../Models/Board';
-import { Fragment } from 'react';
-const {actions} = rootReducer;
-const { setFen, setLastSquares, setPossibleSquares,setBoardState } = actions;
+import { boardReducer } from '../../../Redux/boardReducer';
+import { rootReducer, IRootReducer } from './../../../Redux/rootReducer';
 
-interface Props{
-	move : Board;
-	moveNotation : string;
-	setFen: Function;
-	setLastSquares : Function;
-	setPossibleSquares: Function;
-	setBoardState : Function;
+interface Props {
+	move: Board;
+	rootActions : IRootReducer;
+	setBoardState: Function;
+	setClickedPiece : Function;
+	setPossibleSquares : Function;
 }
 
-const isPawnMove = (notation:string) => notation.length === 2;
+const isPawnMove = (notation: string) => notation.length === 2;
 
 const getASCIIMoveNotation = (notation: string) => {
-	if(isPawnMove(notation)){
+	if (isPawnMove(notation)) {
 		return notation;
 	}
 	const piece = notation.charAt(0);
@@ -42,23 +38,16 @@ const getASCIIMoveNotation = (notation: string) => {
 };
 
 
-const Move = (props : Props) => {
-
-	const goToMove = (move : Board) => {
-		const chess = new Chess(move.fen);
-		props.setBoardState({
-			fen: chess.fen(),
-			pgn: chess.pgn(),
-			turn: chess.turn(),
-			checkmate: chess.in_checkmate(),
-			inCheck: chess.in_check(),
-			lastSquares: move.lastSquares,
-			possibleSquares: [],
-		});
+const Move = (props: Props) => {
+	const goToMove = (move: Board) => {
+		props.setBoardState(move);
+		props.rootActions.clearBoard();
 	};
 
-	return props.move === undefined ? <Fragment></Fragment> :
-	(
+	return props.move === undefined
+		?
+		<Fragment></Fragment>
+		:
 		<ListItem button onClick={() => goToMove(props.move)}>
 			<ListItemText
 				primary={
@@ -68,11 +57,10 @@ const Move = (props : Props) => {
 				}
 			/>
 		</ListItem>
-	);
 };
 
-const mapStateToProps = (state:any) => {
-	return state;
+const mapStateToProps = (state: any) => {
+	return { boardHistory: state.app.boardHistory };
 };
 
-export default connect(mapStateToProps, { setFen, setLastSquares, setPossibleSquares ,setBoardState})(Move);
+export default connect(mapStateToProps, { ...boardReducer.actions, ...rootReducer.actions })(Move);

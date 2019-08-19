@@ -13,6 +13,11 @@ export const blackTurn :Turn='b';
 export const shortCastle = "O-O";
 export const longCastle = "O-O-O";
 
+export const lightSquare = '#F1D9B7';
+export const darkSquare = '#B28A63';
+
+export const inverseSquareColor = (squareColor: string) => squareColor === lightSquare ? darkSquare : lightSquare;
+
 export const pieces : Pieces = {
     white :[
         {

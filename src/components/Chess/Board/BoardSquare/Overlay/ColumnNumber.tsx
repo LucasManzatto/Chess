@@ -1,5 +1,5 @@
 //REACT IMPORTS
-import React, { Fragment } from "react";
+import React, { Fragment, CSSProperties } from "react";
 
 //MATERIAL IMPORTS
 import { Typography } from "@material-ui/core";
@@ -12,23 +12,22 @@ interface Props {
 	squareColor: string;
 }
 
+const isHColumn = (square: Square) => /(h)/.test(square);
+
 const ColumnNumber = (props: Props) => {
-	return /(h)/.test(props.square)
-		? (
-			<div
-				style={{
-					pointerEvents: 'none',
-					position: 'absolute',
-					marginTop: '25%',
-					marginBottom: '25%',
-					marginLeft: '75%',
-					zIndex: 5,
-					opacity: 0.8
-				}}
-			>
-				<Typography style={{ color: props.squareColor }}>{props.square.charAt(1)}</Typography>
-			</div>
-		)
+	const columnNumberStyle: CSSProperties = {
+		pointerEvents: 'none',
+		position: 'absolute',
+		marginLeft: '80%',
+		zIndex: 5,
+		opacity: 0.8,
+		color: props.squareColor,
+		fontWeight: 'bold',
+		fontSize: 'small'
+	};
+
+	return isHColumn(props.square)
+		? <Typography style={columnNumberStyle}>{props.square.charAt(1)}</Typography>
 		: <Fragment></Fragment>
 };
 export default ColumnNumber;

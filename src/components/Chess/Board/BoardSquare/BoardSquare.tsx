@@ -72,11 +72,12 @@ const BoardSquare = (props: Props) => {
 				checkmate: chess.in_checkmate(),
 				inCheck: chess.in_check(),
 				notation: chess.history().slice(-1)[0],
-				turn: props.board.turn,
+				turn: chess.turn() === "w" ? "b" : "w",
 				lastSquares: { from: squareFrom, to: props.square },
 			};
 			props.setBoardState(boardState);
-			props.addMoveToHistory({newMove: boardState});
+			props.addMoveToHistory(boardState);
+			resetSquare();
 		}
 	};
 
@@ -92,10 +93,10 @@ const BoardSquare = (props: Props) => {
 				possibleSquares={props.app.possibleSquares} />
 
 			<ColumnNumber square={props.square}
-				squareColor={props.squareColor} />
+				squareColor={boardSettings.inverseSquareColor(props.squareColor)} />
 
 			<RowLetter square={props.square}
-				squareColor={props.squareColor} />
+				squareColor={boardSettings.inverseSquareColor(props.squareColor)} />
 
 			<Overlay board={props.board}
 				app={props.app}

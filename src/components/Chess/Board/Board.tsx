@@ -11,9 +11,7 @@ import _ from 'lodash';
 //REDUX IMPORTS
 import { connect } from 'react-redux';
 
-const lightSquare = '#F1D9B7';
-const darkSquare = '#B28A63';
-let squareColor = darkSquare;
+let squareColor = boardSettings.darkSquare;
 
 interface Props{
 	fen: string
@@ -23,10 +21,9 @@ const Board = (props: Props) => {
 	let fullFen : string = _.split(props.fen, ' ');
 	let fenBoard : string[]= _.split(fullFen[0], '/');
 	let position = 0;
-	let rowNumber = 8;
 
 	const renderCell = (piece: string) => {
-		squareColor = squareColor === lightSquare ? darkSquare : lightSquare;
+		squareColor = boardSettings.inverseSquareColor(squareColor);
 		return (
 			<BoardSquare
 				key={boardSettings.positions[position]}
@@ -41,11 +38,11 @@ const Board = (props: Props) => {
 
 	const fenIsEmptySquares = (square: string) => _.isNumber(parseInt(square)) && !_.isNaN(parseInt(square));
 
-	return fenBoard.map(boardRow => {
-		squareColor = squareColor === lightSquare ? darkSquare : lightSquare;
+	return fenBoard.map((boardRow,rowNumber) => {
+		squareColor = boardSettings.inverseSquareColor(squareColor);
 		let boardSquares : string[] = _.split(boardRow, '');
 		return (
-			<div key={rowNumber--} className="row justify-content-center" style={{ height: '12.5%' }}>
+			<div key={rowNumber} className="row justify-content-center" style={{ height: '12.5%' }}>
 				{boardSquares.map((square) => {
 					return fenIsEmptySquares(square)
 						? renderEmptySquares(parseInt(square))

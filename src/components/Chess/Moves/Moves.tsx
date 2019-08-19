@@ -14,22 +14,23 @@ import { Typography } from '@material-ui/core';
 
 // PROJECT IMPORTS
 import Move from './Move';
+import { Board } from '../../../Models/Board';
+import { State } from '../../../Models/State';
 
 // LIBRARIES IMPORT
 import _ from 'lodash';
 import * as Chess from 'chess.js';
 
 //REDUX IMPORTS
-import { rootReducer } from '../../../Redux/rootReducer';
-import { Board } from '../../../Models/Board';
-import { State } from '../../../Models/State';
-const { actions } = rootReducer;
-const { setBoardState } = actions;
+import { boardReducer } from '../../../Redux/boardReducer';
+import { rootReducer } from './../../../Redux/rootReducer';
 
 interface Props {
-	movesHistory: Board[]
+	moves: Board[]
 	fen: string;
 	setBoardState: Function;
+	setPossibleSquares : Function;
+	setClickedPiece : Function;
 }
 
 const createMoves = (moves: Board[]) => {
@@ -38,21 +39,14 @@ const createMoves = (moves: Board[]) => {
 };
 
 const Moves = (props:Props) =>{
-	const movesZip = createMoves(props.movesHistory);
+	const movesZip = createMoves(props.moves);
 
 	const rewindMove = () =>{
-		const lastMove :Board= _.find(props.movesHistory,(move: Board) => move.fen === props.fen);
-		const chess = new Chess(lastMove.fen);
-		console.log(chess.pgn())
-		props.setBoardState({
-			fen: chess.fen(),
-			pgn: chess.pgn(),
-			turn: chess.turn(),
-			checkmate: chess.in_checkmate(),
-			inCheck: chess.in_check(),
-			lastSquares: lastMove.lastSquares,
-			possibleSquares: [],
-		});
+		const lastMove :Board= _.find(props.moves,(move: Board) => move.fen === props.fen);
+		props.setBoardState(lastMove);
+		props.setPossibleSquares([]);
+		props.setClickedPiece("");
+
 	}
 	return (
 		<div className="col">
@@ -79,10 +73,10 @@ const Moves = (props:Props) =>{
 									</Typography>
 								</div>
 								<div className="col-5">
-									<Move move={whiteMove} />
+									<Move move={whiteMove} turnNumber={turnNumber + 1} />
 								</div>
 								<div className="col-5">
-									<Move move={blackMove} />
+									<Move move={blackMove} turnNumber={turnNumber + 2}/>
 								</div>
 							</div>
 						);
@@ -112,4 +106,4 @@ const mapStateToProps = (state: any) => {
 	return { moves: app.boardHistory , fen: board.fen};
 };
 
-export default connect(mapStateToProps, { setBoardState })(Moves);
+export default connect(mapStateToProps, { ...boardReducer.actions,...rootReducer.actions })(Moves);
