@@ -1,5 +1,5 @@
 //REACT IMPORTS
-import React, { Fragment ,CSSProperties} from 'react';
+import React, { Fragment, CSSProperties } from 'react';
 
 //PROJECT IMPORTS
 import * as boardSettings from '../../../../../board';
@@ -17,6 +17,7 @@ interface Props {
     square: Square;
     piece: Piece;
     squareColor: string;
+    hover: boolean;
 }
 
 const isWhiteTurn = (turn: Turn) => turn === boardSettings.whiteTurn;
@@ -43,21 +44,21 @@ const Overlay = (props: Props) => {
     };
 
     const greenBorder: CSSProperties = {
+        position: 'absolute',
         opacity: 0.5,
         zIndex: -5,
         height: '100%',
         width: '100%',
-        position: 'absolute',
         backgroundColor: 'green'
     };
 
     const squareColor: CSSProperties = {
         position: 'absolute',
-        borderRadius: 20,
+        opacity: 1,
+        zIndex: 1,
         height: '100%',
         width: '100%',
-        zIndex: 1,
-        opacity: 1,
+        borderRadius: 20,
         backgroundColor: props.squareColor
     };
     if (
@@ -65,12 +66,17 @@ const Overlay = (props: Props) => {
         canRenderShortCastle(props.app.possibleSquares, props.board.turn, props.square) ||
         canRenderLongCastle(props.app.possibleSquares, props.board.turn, props.square)
     ) {
-        return props.piece === "" ?
+        if(props.hover){
+            return <div style={greenBorder}></div>
+        }
+        else{
+            return props.piece === "" ?
             <div style={greenCircle} />
             :
             <div style={greenBorder}>
-                <div style={squareColor} />
+                {!props.hover && <div style={squareColor} />}
             </div>
+        }
     }
     else return <Fragment></Fragment>
 };

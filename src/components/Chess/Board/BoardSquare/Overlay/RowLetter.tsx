@@ -19,7 +19,7 @@ const RowLetter = (props: Props) => {
         pointerEvents: 'none',
         position: 'absolute',
         bottom: 0,
-        zIndex: 5,
+        zIndex: -1,
         opacity: 0.8,
         color: props.squareColor,
         fontWeight: 'bold',
@@ -27,7 +27,7 @@ const RowLetter = (props: Props) => {
     };
 
     return isFirstSquare(props.square)
-        ? <Typography style={letterStyle}>{props.square.charAt(0)}</Typography>
+        ? <Typography className="remove-user-select" style={letterStyle}>{props.square.charAt(0)}</Typography>
         : null;
 };
 export default RowLetter;

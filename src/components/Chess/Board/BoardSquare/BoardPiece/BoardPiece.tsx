@@ -23,7 +23,7 @@ interface Props {
 }
 
 const getPossibleSquares = (moves: string[]) => {
-	return moves.map((move) => _.replace(move, /(.[x]|([N].(?![1-9]))|([QKRNB+#]))/g, ''));
+	return moves.map((move) => _.replace(move, /(.[x]|([N].(?![1-9]))|([QKRNB+#]))|=/g, ''));
 };
 
 const BoardPiece = (props: Props) => {
@@ -33,9 +33,10 @@ const BoardPiece = (props: Props) => {
 	const handleClick = () => {
 		const chess = new Chess(props.fen);
 		props.setClickedPiece(props.square);
+		console.log(getPossibleSquares(chess.moves({ square: props.square })));
 		props.setPossibleSquares(getPossibleSquares(chess.moves({ square: props.square })));
 	};
-	return <img onClick={handleClick} alt="Piece" height={'100%'} width={'100%'} src={pieceImage} />;
+	return <img draggable={false} onClick={handleClick} alt="Piece" height={'100%'} width={'100%'} src={pieceImage} />;
 };
 const mapStateToProps = (state: any) => {
 	return { fen: state.board.fen };

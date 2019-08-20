@@ -19,7 +19,7 @@ const ColumnNumber = (props: Props) => {
 		pointerEvents: 'none',
 		position: 'absolute',
 		marginLeft: '80%',
-		zIndex: 5,
+		zIndex: -1,
 		opacity: 0.8,
 		color: props.squareColor,
 		fontWeight: 'bold',
@@ -27,7 +27,7 @@ const ColumnNumber = (props: Props) => {
 	};
 
 	return isHColumn(props.square)
-		? <Typography style={columnNumberStyle}>{props.square.charAt(1)}</Typography>
+		? <Typography className="remove-user-select" style={columnNumberStyle}>{props.square.charAt(1)}</Typography>
 		: <Fragment></Fragment>
 };
 export default ColumnNumber;

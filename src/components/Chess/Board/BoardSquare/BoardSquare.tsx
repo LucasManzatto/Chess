@@ -1,5 +1,5 @@
 //REACT IMPORTS
-import React from 'react';
+import React, { CSSProperties, useState } from 'react';
 
 //MATERIAL IMPORTS
 
@@ -21,31 +21,25 @@ import _ from 'lodash';
 
 //REDUX IMPORTS
 import { connect } from 'react-redux';
-import {boardReducer} from '../../../../Redux/boardReducer';
+import { boardReducer, BoardReducerActions } from '../../../../Redux/boardReducer';
 import { rootReducer } from './../../../../Redux/rootReducer';
+import { RootReducerActions } from './../../../../Redux/rootReducer';
 
-interface Props {
+interface Props extends RootReducerActions,BoardReducerActions {
 	app: State;
 	board: Board;
 	piece: Piece;
 	square: Square;
 	squareColor: string;
-	setClickedPiece: Function;
-	setPossibleSquares: Function;
-	setBoardState: Function;
-	addMoveToHistory : Function;
 }
 
 const BoardSquare = (props: Props) => {
 
+	const [onHoverStyle,setOnHoverStyle] = useState(false);
+
 	const isSameSquare = (from: Square, to: Square) => from === to;
 
 	const canMove = (chess: any, from: Square, to: Square) => chess.move({ from, to, promotion: 'q' }) != null;
-
-	const resetSquare = () => {
-		props.setClickedPiece('');
-		props.setPossibleSquares([]);
-	};
 
 	const includeSquare = (possibleSquares: Square[], square: Square) => {
 		return (
@@ -62,7 +56,7 @@ const BoardSquare = (props: Props) => {
 		const possibleSquares = props.app.possibleSquares;
 
 		if (isSameSquare(squareFrom, props.square)) {
-			resetSquare();
+			props.clearBoard();
 		}
 
 		if (includeSquare(possibleSquares, props.square) && canMove(chess, squareFrom, props.square)) {
@@ -77,12 +71,20 @@ const BoardSquare = (props: Props) => {
 			};
 			props.setBoardState(boardState);
 			props.addMoveToHistory(boardState);
-			resetSquare();
+			props.clearBoard();
 		}
 	};
 
 	return (
-		<div className="col p-0" onClick={movePiece} key={props.piece} style={{ zIndex: 0, backgroundColor: props.squareColor }}>
+		<div className="col p-0"
+			onClick={movePiece}
+			key={props.piece}
+			style={{
+				zIndex: 0,
+				backgroundColor: props.squareColor,
+			}}
+			onMouseEnter={()=> setOnHoverStyle(true)}
+			onMouseLeave={() => setOnHoverStyle(false)}>
 
 			<Check inCheck={props.board.inCheck}
 				piece={props.piece}
@@ -102,7 +104,8 @@ const BoardSquare = (props: Props) => {
 				app={props.app}
 				square={props.square}
 				squareColor={props.squareColor}
-				piece={props.piece} />
+				piece={props.piece}
+				hover={onHoverStyle}/>
 
 			<BoardPiece piece={props.piece} square={props.square} />
 		</div>
@@ -116,4 +119,4 @@ const mapStateToProps = (state: any) => {
 	};
 };
 
-export default connect(mapStateToProps, {...rootReducer.actions,...boardReducer.actions})(BoardSquare);
+export default connect(mapStateToProps, { ...rootReducer.actions, ...boardReducer.actions })(BoardSquare);

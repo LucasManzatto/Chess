@@ -15,15 +15,12 @@ import { Board } from '../../../Models/Board';
 import _ from 'lodash';
 
 //REDUX IMPORTS
-import { boardReducer } from '../../../Redux/boardReducer';
-import { rootReducer, IRootReducer } from './../../../Redux/rootReducer';
+import { boardReducer, BoardReducerActions } from '../../../Redux/boardReducer';
+import { rootReducer, RootReducerActions } from './../../../Redux/rootReducer';
 
-interface Props {
+interface Props extends BoardReducerActions, RootReducerActions{
 	move: Board;
-	rootActions : IRootReducer;
-	setBoardState: Function;
-	setClickedPiece : Function;
-	setPossibleSquares : Function;
+	boardHistory: Board[];
 }
 
 const isPawnMove = (notation: string) => notation.length === 2;
@@ -37,11 +34,12 @@ const getASCIIMoveNotation = (notation: string) => {
 	return _.replace(notation, piece, pieceAsciiImg);
 };
 
-
 const Move = (props: Props) => {
 	const goToMove = (move: Board) => {
+		const moveIndex = _.findIndex(props.boardHistory, (board: Board) => board.fen === move.fen) + 1;
+		props.setMoveHistory(props.boardHistory.slice(0,moveIndex))
 		props.setBoardState(move);
-		props.rootActions.clearBoard();
+		props.clearBoard();
 	};
 
 	return props.move === undefined

@@ -22,15 +22,13 @@ import _ from 'lodash';
 import * as Chess from 'chess.js';
 
 //REDUX IMPORTS
-import { boardReducer } from '../../../Redux/boardReducer';
-import { rootReducer } from './../../../Redux/rootReducer';
+import { boardReducer,BoardReducerActions } from '../../../Redux/boardReducer';
+import { rootReducer,RootReducerActions } from './../../../Redux/rootReducer';
+import { Square } from '../../../Models/Square';
 
-interface Props {
+interface Props extends BoardReducerActions,RootReducerActions {
 	moves: Board[]
 	fen: string;
-	setBoardState: Function;
-	setPossibleSquares : Function;
-	setClickedPiece : Function;
 }
 
 const createMoves = (moves: Board[]) => {
@@ -44,8 +42,7 @@ const Moves = (props:Props) =>{
 	const rewindMove = () =>{
 		const lastMove :Board= _.find(props.moves,(move: Board) => move.fen === props.fen);
 		props.setBoardState(lastMove);
-		props.setPossibleSquares([]);
-		props.setClickedPiece("");
+		props.clearBoard();
 
 	}
 	return (
